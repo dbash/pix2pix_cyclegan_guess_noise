@@ -42,7 +42,7 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
         if aspect_ratio < 1.0:
             im = imresize(im, (int(h / aspect_ratio), w), interp='bicubic')
         util.save_image(im, save_path)
-
+        #print(label, im_data.min(), im_data.max())
         ims.append(image_name)
         txts.append(label)
         links.append(image_name)
