@@ -43,7 +43,7 @@ class CycleGANNoiseTestModel(BaseModel):
             parser.add_argument('--lambda_A', type=float, default=10.0, help='weight for cycle loss (A -> B -> A)')
             parser.add_argument('--lambda_B', type=float, default=10.0, help='weight for cycle loss (B -> A -> B)')
             parser.add_argument('--lambda_identity', type=float, default=0.5, help='use identity mapping. Setting lambda_identity other than 0 has an effect of scaling the weight of the identity mapping loss. For example, if the weight of the identity loss should be 10 times smaller than the weight of the reconstruction loss, please set lambda_identity = 0.1')
-        parser.add_argument('--sigma', type=float, default=0.01, help='weight for cycle loss (A -> B -> A)')
+        parser.add_argument('--noise_std', type=float, default=0.01, help='standard deviation of Gaussian noise')
         return parser
 
     def __init__(self, opt):
@@ -56,8 +56,8 @@ class CycleGANNoiseTestModel(BaseModel):
         # specify the training losses you want to print out. The training/test scripts will call <BaseModel.get_current_losses>
         self.loss_names = ['D_A', 'G_A', 'cycle_A', 'idt_A', 'D_B', 'G_B', 'cycle_B', 'idt_B']
         # specify the images you want to save/display. The training/test scripts will call <BaseModel.get_current_visuals>
-        visual_names_A = ['real_A', 'fake_B', 'fake_B_floor', 'rec_A', 'rec_A_floor']
-        visual_names_B = ['real_B', 'fake_A', 'fake_A_floor', 'rec_B', 'rec_B_floor']
+        visual_names_A = ['real_A', 'fake_B', 'fake_B_floor', 'rec_A', 'rec_A_noisy']
+        visual_names_B = ['real_B', 'fake_A', 'fake_A_floor', 'rec_B', 'rec_B_noisy']
         if self.isTrain and self.opt.lambda_identity > 0.0:  # if identity loss is used, we also visualize G_B(A) ad G_A(B)
             visual_names_A.append('idt_A')
             visual_names_B.append('idt_B')
@@ -69,7 +69,7 @@ class CycleGANNoiseTestModel(BaseModel):
         else:  # during test time, only load Gs
             self.model_names = ['G_A', 'G_B']
 
-        self.sigma = opt.sigma
+        self.sigma = opt.noise_std
         # define networks (both Generators and discriminators)
         # The naming is different from those used in the paper.
         # Code (vs. paper): G_A (G), G_B (F), D_A (D_Y), D_B (D_X)
