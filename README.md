@@ -18,7 +18,7 @@ respectively.
 In order to reproduce our results, you can find all the configuration
  files in [configs](configs) directory.
  
-<img src="http://cs-people.bu.edu/dbash/honest_gan/result_figs/gta2segm_guess.png" align="center" width=800>
+<img src="images/gta2segm_guess.png" align="center" width=800>
 
 
 
