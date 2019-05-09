@@ -18,7 +18,7 @@ respectively.
 In order to reproduce our results, you can find all the configuration
  files in [configs](configs) directory.
  
-<img src="images/gta2segm_guess.png" align="center" width=800>
+<img src='imgs/gta2segm_guess.png' align="center" width=800>
 
 
 
