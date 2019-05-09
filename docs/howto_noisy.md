@@ -1,4 +1,4 @@
-#Noisy CycleGAN
+# Noisy CycleGAN
 
 The idea behind noisy CycleGAN is to train the model to generate reconstruction
 results robust to high-frequency perturbations which lie in the same frequency spectre with 
