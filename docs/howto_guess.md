@@ -1,4 +1,4 @@
-#Guess Discriminator 
+# Guess Discriminator 
 
 Guess discriminator is an additional network that receives as input 
 a concatenation of the input image and its reconstruction in a random order. 
@@ -8,7 +8,7 @@ Guess discriminator aids CycleGAN in preventing the self-adversarial
 attack by mimicking the adversarial training defense approach widely used 
 to make DNNs more robust to adversarial structured noise.
 
-##Training and testing
+## Training and testing
 The training and testing procedures of the CycleGAN with Guess Discriminator are 
 very similar to those of the original CycleGAN (basic instructions and recommendations on how to train the original
 CycleGAN that could be found [here](tips.md)).
