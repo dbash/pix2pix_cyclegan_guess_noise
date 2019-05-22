@@ -57,18 +57,21 @@ class gta2segmDataset(BaseDataset):
         # B = AB.crop((w2, 0, w, h))
 
         # apply the same transform to both A and B
-        transform_params_A = get_params(self.opt, A.size)
-        transform_params_B = get_params(self.opt, B.size)
+        # transform_params_A = get_params(self.opt, A.size)
+        # transform_params_B = get_params(self.opt, B.size)
         #print(np.array(B).min(), np.array(B).max())
 
-        A_transform = get_transform(self.opt, transform_params_A, grayscale=(self.input_nc == 1))
-        B_transform = get_transform(self.opt, transform_params_B, grayscale=(self.output_nc == 1))
+        transform_params = get_params(self.opt, A.size)
+        A_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
+        B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1))
 
         # imageio.imwrite("/scratch2/dinka/pix2pix/gta2cityscapes/web/A_t.png", np.array(B))
         # sys.exit()
         #imageio.imwrite( "/scratch2/dinka/pix2pix/gta2cityscapes/web/A.png", np.array(A))
         A_tr = A_transform(A)
         B_tr = B_transform(B)
+
+        # import ipdb; ipdb.set_trace()
         # imageio.imwrite("/scratch2/dinka/pix2pix/gta2cityscapes/web/A_t.png", np.array(A))
         #
         # imageio.imwrite("/scratch2/dinka/pix2pix/gta2cityscapes/web/B_t.png", np.array(B_tr.permute(1, 2, 0).numpy()))

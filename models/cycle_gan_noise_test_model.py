@@ -56,8 +56,8 @@ class CycleGANNoiseTestModel(BaseModel):
         # specify the training losses you want to print out. The training/test scripts will call <BaseModel.get_current_losses>
         self.loss_names = ['D_A', 'G_A', 'cycle_A', 'idt_A', 'D_B', 'G_B', 'cycle_B', 'idt_B']
         # specify the images you want to save/display. The training/test scripts will call <BaseModel.get_current_visuals>
-        visual_names_A = ['real_A', 'fake_B', 'fake_B_floor', 'rec_A', 'rec_A_noisy']
-        visual_names_B = ['real_B', 'fake_A', 'fake_A_floor', 'rec_B', 'rec_B_noisy']
+        visual_names_A = ['real_A', 'fake_B', 'fake_B_noisy', 'rec_A', 'rec_A_noisy']
+        visual_names_B = ['real_B', 'fake_A', 'fake_A_noisy', 'rec_B', 'rec_B_noisy']
         if self.isTrain and self.opt.lambda_identity > 0.0:  # if identity loss is used, we also visualize G_B(A) ad G_A(B)
             visual_names_A.append('idt_A')
             visual_names_B.append('idt_B')
@@ -122,23 +122,17 @@ class CycleGANNoiseTestModel(BaseModel):
 
 
        # print(self.real_B.min(), self.real_B.max())
-        self.fake_A_floor = self.add_channelwise_noise(self.fake_A, sigma=self.sigma) #(torch.floor((self.fake_A + 1) * 128))/128 - 1
-        self.fake_B_floor = self.add_channelwise_noise(self.fake_B, sigma=self.sigma) #(torch.floor((self.fake_B + 1) * 128))/128 - 1
-        self.rec_A_floor = self.netG_B(self.fake_B_floor)
-        self.rec_B_floor = self.netG_A(self.fake_A_floor)
+        self.fake_A_noisy = self.add_channelwise_noise(self.fake_A) #(torch.floor((self.fake_A + 1) * 128))/128 - 1
+        self.fake_B_noisy = self.add_channelwise_noise(self.fake_B) #(torch.floor((self.fake_B + 1) * 128))/128 - 1
+        self.rec_A_noisy = self.netG_B(self.fake_B_noisy)
+        self.rec_B_noisy = self.netG_A(self.fake_A_noisy)
+        self.fake_A_noisy = torch.clamp(self.fake_A_noisy, -1, 1)
+        self.fake_B_noisy = torch.clamp(self.fake_B_noisy, -1, 1)
 
-    def add_channelwise_noise(self, in_tensor, sigma=0.01):
-        # print(in_tensor.min(), in_tensor.max())
-
-        in_image = (in_tensor + 1)*128
-        # print("before noise: mean = ", in_tensor.mean())
-        # print("std = ", in_tensor.std())
-
-        noisy_image = torch.rand(list(in_image.size())).cuda()*sigma*128 + in_image
-        noisy_tensor = 2*noisy_image/noisy_image.max() - 1
-        # print("after noise: mean = ", noisy_tensor.mean())
-        # print("std = ", noisy_tensor.std())
-        return noisy_tensor
+    def add_channelwise_noise(self, in_tensor):
+        noisy_image = torch.zeros(list(in_tensor.size())).data.normal_(0, self.sigma).cuda() + in_tensor
+        # noisy_tensor = 2 * (noisy_image - noisy_image.min()) / (noisy_image.max() - noisy_image.min()) - 1
+        return noisy_image
 
     def backward_D_basic(self, netD, real, fake):
         """Calculate GAN loss for the discriminator

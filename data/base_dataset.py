@@ -89,11 +89,12 @@ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, conve
         transform_list.append(transforms.Lambda(lambda img: __scale_width(img, opt.load_size, method)))
 
     if 'crop' in opt.preprocess:
-        if params is None:
+        if opt.phase == 'test':
+            #print("center")
+            transform_list.append(transforms.CenterCrop(opt.crop_size))  ####change back to random crop!!!!
+        elif params is None:
             if opt.phase == 'train':
                 transform_list.append(transforms.RandomCrop(opt.crop_size)) ####change back to random crop!!!!
-            if opt.phase == 'test':
-                transform_list.append(transforms.CenterCrop(opt.crop_size)) ####change back to random crop!!!!
         else:
             transform_list.append(transforms.Lambda(lambda img: __crop(img, params['crop_pos'], opt.crop_size)))
 

@@ -112,11 +112,17 @@ class CycleGANNoisyModel(BaseModel):
     def forward(self):
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""
         self.fake_B = self.netG_A(self.real_A)  # G_A(A)
-        self.fake_B_noisy = self.gaussian(self.fake_B)
-        self.rec_A = self.netG_B(self.fake_B_noisy)   # G_B(G_A(A))
         self.fake_A = self.netG_B(self.real_B)  # G_B(B)
-        self.fake_A_noisy = self.gaussian(self.fake_A)
-        self.rec_B = self.netG_A(self.fake_A_noisy)   # G_A(G_B(B))
+        if self.isTrain:
+            self.fake_B_noisy = self.gaussian(self.fake_B)
+            self.rec_A = self.netG_B(self.fake_B_noisy)  # G_B(G_A(A))
+            self.fake_A_noisy = self.gaussian(self.fake_A)
+            self.rec_B = self.netG_A(self.fake_A_noisy)  # G_A(G_B(B))
+        else:
+            self.rec_A = self.netG_B(self.fake_B)
+            self.rec_B = self.netG_A(self.fake_A)
+
+
 
     def backward_D_basic(self, netD, real, fake):
         """Calculate GAN loss for the discriminator
@@ -196,6 +202,7 @@ class CycleGANNoisyModel(BaseModel):
         self.optimizer_D.step()  # update D_A and D_B's weights
 
 
-    def gaussian(self, ins):
-        # print(((ins.max() - ins.min())*self.stddev))
-        return ins + torch.autograd.Variable(torch.randn(ins.size()).cuda() *((ins.max() - ins.min())*0.5*self.stddev))
+    def gaussian(self, in_tensor):
+        noisy_image = torch.zeros(list(in_tensor.size())).data.normal_(0, self.stddev).cuda() + in_tensor
+        # noisy_tensor = 2 * (noisy_image - noisy_image.min()) / (noisy_image.max() - noisy_image.min()) - 1
+        return noisy_image

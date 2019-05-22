@@ -35,6 +35,7 @@ class TestModel(BaseModel):
             opt (Option class)-- stores all the experiment flags; needs to be a subclass of BaseOptions
         """
         assert(not opt.isTrain)
+
         BaseModel.__init__(self, opt)
         # specify the training losses you want to print out. The training/test scripts  will call <BaseModel.get_current_losses>
         self.loss_names = []
