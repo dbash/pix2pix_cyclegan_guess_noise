@@ -1,6 +1,7 @@
 
 
 # Defending CycleGAN from Self-Adversarial Attack
+# Paper: https://arxiv.org/abs/1908.01517
 
 In this repository you can find the extension of the original 
 implementation of CycleGAN in pytorch. This extension contains 
