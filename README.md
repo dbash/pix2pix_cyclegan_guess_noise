@@ -1,7 +1,9 @@
 
 
 # Defending CycleGAN from Self-Adversarial Attack
-# Paper: https://arxiv.org/abs/1908.01517
+This is the official implementation of the CycleGAN robust to self-adversarial attacks
+used in paper "Adversarial Self-Defense for Cycle-Consistent GANs" by Dina Bashkirova, Ben Usman and Kate Saenko, NeurIPS'2019.
+[Paper](https://papers.nips.cc/paper/2019/file/b83aac23b9528732c23cc7352950e880-Paper.pdf)
 
 In this repository you can find the extension of the original 
 implementation of CycleGAN in pytorch. This extension contains 
