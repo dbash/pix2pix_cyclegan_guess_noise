@@ -1,6 +1,6 @@
 
 
-# Defending CycleGAN from Self-Adversarial Attack
+# Adversarial Self-Defense for Cycle-Consistent GANs
 This is the official implementation of the CycleGAN robust to self-adversarial attacks
 used in paper "Adversarial Self-Defense for Cycle-Consistent GANs" by Dina Bashkirova, Ben Usman and Kate Saenko, NeurIPS'2019.
 [Paper](https://papers.nips.cc/paper/2019/file/b83aac23b9528732c23cc7352950e880-Paper.pdf)
